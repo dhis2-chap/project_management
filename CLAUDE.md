@@ -17,3 +17,7 @@ Note: These directories are not yet created but should be used as the codebase d
 This is a Python project. Currently there are no dependencies, build tools, or test frameworks configured.
 
 The `main.py` file in the root is a PyCharm boilerplate and should likely be removed or replaced as actual project code is added to `src/`.
+
+## Git Commit Guidelines
+
+When creating commits, do not add Claude Code attribution or co-author information to commit messages.
