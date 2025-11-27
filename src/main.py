@@ -146,23 +146,36 @@ def main():
                 aligned_count += 1
 
         # Store weekly snapshot
+        week_end = date.today()
         db.store_weekly_snapshot(
             week_start=week_start,
-            week_end=date.today(),
+            week_end=week_end,
             total_issues=len(issues),
             aligned_issues=aligned_count,
             unaligned_issues=unaligned_count,
             okr_period=okr_set.period
         )
 
-        # 7. Summary
+        # 7. Generate report
+        console.print("\n[cyan]7. Generating markdown report...[/cyan]")
+        from .reporting.metrics import MetricsCalculator
+        from .reporting.markdown_generator import MarkdownReportGenerator
+
+        metrics = MetricsCalculator(db, okr_set, week_start)
+        report_gen = MarkdownReportGenerator(metrics, week_start, week_end)
+        report_file = report_gen.generate_report(config.report_output_dir)
+
+        console.print(f"  ✓ Report: {report_file}")
+
+        # 8. Summary
         console.print("\n[bold green]✓ Analysis Complete![/bold green]")
         console.print(f"\n[bold]Summary:[/bold]")
         console.print(f"  Total issues analyzed: {len(issues)}")
         console.print(f"  Aligned with OKRs: {aligned_count} ({aligned_count/len(issues)*100:.1f}%)")
         console.print(f"  Unaligned: {unaligned_count} ({unaligned_count/len(issues)*100:.1f}%)")
 
-        console.print(f"\n[dim]Results stored in: {config.database_path}[/dim]")
+        console.print(f"\n[dim]Database: {config.database_path}[/dim]")
+        console.print(f"[dim]Report: {report_file}[/dim]")
 
         return 0
 
