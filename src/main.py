@@ -122,8 +122,17 @@ def main():
                 for match in result.get('matches', []):
                     if match['confidence'] >= config.confidence_threshold:
                         # Construct OKR ID from objective and key result
-                        obj_num = int(match['objective_id'].replace('obj', ''))
-                        kr_num = int(match['key_result_id'].replace('kr', ''))
+                        obj_id = match['objective_id'].replace('obj', '')
+                        kr_id = match['key_result_id'].replace('kr', '')
+
+                        # Handle formats like "1", "1.2", "kr1.2", etc.
+                        try:
+                            obj_num = int(float(obj_id))
+                            kr_num = int(float(kr_id))
+                        except ValueError:
+                            logger.warning(f"Invalid OKR ID format for {issue.key}: obj={match['objective_id']}, kr={match['key_result_id']}")
+                            continue
+
                         okr_id = f"obj{obj_num}_kr{kr_num}"
 
                         db.store_mapping(
