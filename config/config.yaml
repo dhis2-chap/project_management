@@ -1,0 +1,28 @@
+jira:
+  project_key: "CLIM"
+  analysis_days: 7
+
+okr:
+  directory: "input/OKR"
+  auto_detect_latest: true
+  default_file: "may_2026.md"
+
+matching:
+  claude_model: "claude-sonnet-4-5-20250929"
+  confidence_threshold: 0.5
+  individual_analysis: true
+  allow_multiple_matches: true
+
+database:
+  path: "output/data/okr_analysis.db"
+
+reporting:
+  output_dir: "output/reports"
+  trend_weeks: 4
+
+notifications:
+  slack:
+    enabled: false  # Disabled for initial testing
+    detail_level: "moderate"
+    max_unaligned_issues: 5
+    max_underprioritized_okrs: 3
